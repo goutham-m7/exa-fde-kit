@@ -1,0 +1,250 @@
+[
+  {
+    "id": "py-tasks",
+    "question": "How can a Python service wait for a group of asyncio tasks and cancel siblings when one fails?",
+    "domains": [
+      "docs.python.org"
+    ],
+    "aliases": [
+      "TaskGroup"
+    ]
+  },
+  {
+    "id": "py-timeout",
+    "question": "How do I bound the time spent awaiting work in an asyncio context manager?",
+    "domains": [
+      "docs.python.org"
+    ],
+    "aliases": [
+      "asyncio.timeout"
+    ]
+  },
+  {
+    "id": "py-venv",
+    "question": "How should a teammate recreate a Python virtual environment after moving a project?",
+    "domains": [
+      "docs.python.org"
+    ],
+    "aliases": [
+      "recreate",
+      "re-create",
+      "recreating"
+    ]
+  },
+  {
+    "id": "pip-hashes",
+    "question": "Which pip install option requires hashes for every dependency in a locked requirements file?",
+    "domains": [
+      "pip.pypa.io"
+    ],
+    "aliases": [
+      "--require-hashes"
+    ]
+  },
+  {
+    "id": "packaging-entry",
+    "question": "Where do I declare a Python command-line entry point in pyproject.toml?",
+    "domains": [
+      "packaging.python.org"
+    ],
+    "aliases": [
+      "project.scripts"
+    ]
+  },
+  {
+    "id": "k8-ready",
+    "question": "Which Kubernetes probe keeps a starting pod out of Service endpoints without restarting it?",
+    "domains": [
+      "kubernetes.io"
+    ],
+    "aliases": [
+      "readiness"
+    ]
+  },
+  {
+    "id": "k8-drain",
+    "question": "What limits voluntary disruptions when we drain a node serving a replicated application?",
+    "domains": [
+      "kubernetes.io"
+    ],
+    "aliases": [
+      "PodDisruptionBudget",
+      "disruption budget"
+    ]
+  },
+  {
+    "id": "k8-rollout",
+    "question": "What command reverts a failed Kubernetes Deployment rollout to its previous revision?",
+    "domains": [
+      "kubernetes.io"
+    ],
+    "aliases": [
+      "rollout undo"
+    ]
+  },
+  {
+    "id": "k8-resources",
+    "question": "Which container resource value does the Kubernetes scheduler use to place a pod?",
+    "domains": [
+      "kubernetes.io"
+    ],
+    "aliases": [
+      "requests",
+      "request"
+    ]
+  },
+  {
+    "id": "docker-cache",
+    "question": "How can I keep downloaded packages across Dockerfile build steps without putting them in the image?",
+    "domains": [
+      "docs.docker.com"
+    ],
+    "aliases": [
+      "type=cache"
+    ]
+  },
+  {
+    "id": "docker-context",
+    "question": "Which file prevents local build artifacts from being sent in a Docker build context?",
+    "domains": [
+      "docs.docker.com"
+    ],
+    "aliases": [
+      ".dockerignore"
+    ]
+  },
+  {
+    "id": "docker-signal",
+    "question": "Which Dockerfile ENTRYPOINT form lets the executable receive the stop signal directly?",
+    "domains": [
+      "docs.docker.com"
+    ],
+    "aliases": [
+      "exec form"
+    ]
+  },
+  {
+    "id": "pg-index",
+    "question": "How can we build a PostgreSQL index without blocking concurrent writes to the table?",
+    "domains": [
+      "postgresql.org"
+    ],
+    "aliases": [
+      "concurrently"
+    ]
+  },
+  {
+    "id": "pg-timeout",
+    "question": "Which PostgreSQL setting limits only the time spent waiting to acquire a lock?",
+    "domains": [
+      "postgresql.org"
+    ],
+    "aliases": [
+      "lock_timeout"
+    ]
+  },
+  {
+    "id": "pg-plan",
+    "question": "How do I ask PostgreSQL for actual execution times instead of only planner estimates?",
+    "domains": [
+      "postgresql.org"
+    ],
+    "aliases": [
+      "explain analyze",
+      "explain (analyze"
+    ]
+  },
+  {
+    "id": "sqlite-wal",
+    "question": "Which SQLite journal mode lets readers continue while a writer records changes?",
+    "domains": [
+      "sqlite.org"
+    ],
+    "aliases": [
+      "WAL",
+      "write-ahead logging"
+    ]
+  },
+  {
+    "id": "sqlite-fk",
+    "question": "Which SQLite pragma enables enforcement of foreign key constraints on a connection?",
+    "domains": [
+      "sqlite.org"
+    ],
+    "aliases": [
+      "foreign_keys"
+    ]
+  },
+  {
+    "id": "git-undo",
+    "question": "Which Git command records a new commit that reverses an already shared commit?",
+    "domains": [
+      "git-scm.com"
+    ],
+    "aliases": [
+      "git revert"
+    ]
+  },
+  {
+    "id": "git-find",
+    "question": "How can I locate the first bad Git commit by repeatedly testing halfway through history?",
+    "domains": [
+      "git-scm.com"
+    ],
+    "aliases": [
+      "git bisect"
+    ]
+  },
+  {
+    "id": "rust-lock",
+    "question": "How do I make Cargo fail if building would require changing the lockfile?",
+    "domains": [
+      "doc.rust-lang.org"
+    ],
+    "aliases": [
+      "--locked"
+    ]
+  },
+  {
+    "id": "go-race",
+    "question": "How do I run Go tests with the race detector enabled?",
+    "domains": [
+      "go.dev"
+    ],
+    "aliases": [
+      "-race"
+    ]
+  },
+  {
+    "id": "http-retry",
+    "question": "Where do HTTP semantics and browser docs define how long to wait after a 503?",
+    "domains": [
+      "rfc-editor.org",
+      "developer.mozilla.org"
+    ],
+    "aliases": [
+      "Retry-After"
+    ]
+  },
+  {
+    "id": "web-conditional",
+    "question": "Which request header sends an ETag back to a server to revalidate a cached response?",
+    "domains": [
+      "developer.mozilla.org",
+      "rfc-editor.org"
+    ],
+    "aliases": [
+      "If-None-Match"
+    ]
+  },
+  {
+    "id": "css-motion",
+    "question": "How can a web component respect an operating system preference for reduced animations?",
+    "domains": [
+      "developer.mozilla.org"
+    ],
+    "aliases": [
+      "prefers-reduced-motion"
+    ]
+  }
+]

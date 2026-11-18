@@ -93,3 +93,16 @@ def test_concurrency_limit():
     with ThreadPoolExecutor(max_workers=6) as pool:
         list(pool.map(lambda n: research(c, str(n)), range(8)))
     assert peak == 2
+
+
+def test_select_relevant_evidence_over_off_topic_search_hit():
+    def reply(req):
+        if req.url.path == "/search":
+            return httpx.Response(200, json={"results": [{"url": OTHER}, {"url": URL}]})
+        return httpx.Response(200, json={"results": [
+            {"url": OTHER, "highlights": ["See the release notes for details."]},
+            {"url": URL, "highlights": ["An overview.", "An asyncio timeout bounds work."]},
+        ]})
+    a = research(client(reply), "How do I use an asyncio timeout?")
+    assert a.urls == [OTHER, URL]
+    assert [(c.url, c.text) for c in a.citations] == [(URL, "An asyncio timeout bounds work.")]

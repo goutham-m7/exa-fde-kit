@@ -1,0 +1,641 @@
+{
+  "notice": "Hand-authored synthetic replay, NOT Exa responses. Dates, rankings and snippets are invented for testing. Not a source of benchmarks.",
+  "queries": {
+    "How can a Python service wait for a group of asyncio tasks and cancel siblings when one fails?": {
+      "auto": [
+        "py-tasks",
+        "general",
+        "py-timeout",
+        "py-venv",
+        "empty"
+      ],
+      "lite": [
+        "py-tasks",
+        "general",
+        "py-timeout",
+        "py-venv",
+        "empty"
+      ]
+    },
+    "How do I bound the time spent awaiting work in an asyncio context manager?": {
+      "auto": [
+        "py-timeout",
+        "general",
+        "py-tasks",
+        "py-venv",
+        "empty"
+      ],
+      "lite": [
+        "general",
+        "py-tasks",
+        "py-venv",
+        "empty",
+        "py-timeout"
+      ]
+    },
+    "How should a teammate recreate a Python virtual environment after moving a project?": {
+      "auto": [
+        "py-venv",
+        "general",
+        "py-tasks",
+        "py-timeout",
+        "empty"
+      ],
+      "lite": [
+        "py-venv",
+        "general",
+        "py-tasks",
+        "py-timeout",
+        "empty"
+      ]
+    },
+    "Which pip install option requires hashes for every dependency in a locked requirements file?": {
+      "auto": [
+        "pip-hashes",
+        "general",
+        "py-tasks",
+        "py-timeout",
+        "empty"
+      ],
+      "lite": [
+        "pip-hashes",
+        "general",
+        "py-tasks",
+        "py-timeout",
+        "empty"
+      ]
+    },
+    "Where do I declare a Python command-line entry point in pyproject.toml?": {
+      "auto": [
+        "py-tasks",
+        "packaging-entry",
+        "general",
+        "py-timeout",
+        "empty"
+      ],
+      "lite": [
+        "packaging-entry",
+        "general",
+        "py-timeout",
+        "empty",
+        "py-tasks"
+      ]
+    },
+    "Which Kubernetes probe keeps a starting pod out of Service endpoints without restarting it?": {
+      "auto": [
+        "general",
+        "k8-drain",
+        "k8-rollout",
+        "empty",
+        "k8-ready"
+      ],
+      "lite": [
+        "general",
+        "k8-drain",
+        "k8-rollout",
+        "empty",
+        "k8-ready"
+      ]
+    },
+    "What limits voluntary disruptions when we drain a node serving a replicated application?": {
+      "auto": [
+        "k8-drain",
+        "general",
+        "k8-ready",
+        "k8-rollout",
+        "empty"
+      ],
+      "lite": [
+        "k8-drain",
+        "general",
+        "k8-ready",
+        "k8-rollout",
+        "empty"
+      ]
+    },
+    "What command reverts a failed Kubernetes Deployment rollout to its previous revision?": {
+      "auto": [
+        "k8-rollout",
+        "general",
+        "k8-ready",
+        "k8-drain",
+        "empty"
+      ],
+      "lite": [
+        "general",
+        "k8-ready",
+        "k8-drain",
+        "empty",
+        "k8-rollout"
+      ]
+    },
+    "Which container resource value does the Kubernetes scheduler use to place a pod?": {
+      "auto": [
+        "k8-resources",
+        "general",
+        "k8-ready",
+        "k8-drain",
+        "empty"
+      ],
+      "lite": [
+        "k8-resources",
+        "general",
+        "k8-ready",
+        "k8-drain",
+        "empty"
+      ]
+    },
+    "How can I keep downloaded packages across Dockerfile build steps without putting them in the image?": {
+      "auto": [
+        "docker-cache",
+        "general",
+        "docker-context",
+        "docker-signal",
+        "empty"
+      ],
+      "lite": [
+        "docker-cache",
+        "general",
+        "docker-context",
+        "docker-signal",
+        "empty"
+      ]
+    },
+    "Which file prevents local build artifacts from being sent in a Docker build context?": {
+      "auto": [
+        "docker-cache",
+        "docker-context",
+        "general",
+        "docker-signal",
+        "empty"
+      ],
+      "lite": [
+        "docker-context",
+        "general",
+        "docker-signal",
+        "empty",
+        "docker-cache"
+      ]
+    },
+    "Which Dockerfile ENTRYPOINT form lets the executable receive the stop signal directly?": {
+      "auto": [
+        "general",
+        "docker-cache",
+        "docker-context",
+        "empty",
+        "docker-signal"
+      ],
+      "lite": [
+        "general",
+        "docker-cache",
+        "docker-context",
+        "empty",
+        "docker-signal"
+      ]
+    },
+    "How can we build a PostgreSQL index without blocking concurrent writes to the table?": {
+      "auto": [
+        "pg-index",
+        "general",
+        "pg-timeout",
+        "pg-plan",
+        "empty"
+      ],
+      "lite": [
+        "pg-index",
+        "general",
+        "pg-timeout",
+        "pg-plan",
+        "empty"
+      ]
+    },
+    "Which PostgreSQL setting limits only the time spent waiting to acquire a lock?": {
+      "auto": [
+        "pg-timeout",
+        "general",
+        "pg-index",
+        "pg-plan",
+        "empty"
+      ],
+      "lite": [
+        "general",
+        "pg-index",
+        "pg-plan",
+        "empty",
+        "pg-timeout"
+      ]
+    },
+    "How do I ask PostgreSQL for actual execution times instead of only planner estimates?": {
+      "auto": [
+        "pg-plan",
+        "general",
+        "pg-index",
+        "pg-timeout",
+        "empty"
+      ],
+      "lite": [
+        "pg-plan",
+        "general",
+        "pg-index",
+        "pg-timeout",
+        "empty"
+      ]
+    },
+    "Which SQLite journal mode lets readers continue while a writer records changes?": {
+      "auto": [
+        "sqlite-wal",
+        "general",
+        "pg-index",
+        "pg-timeout",
+        "empty"
+      ],
+      "lite": [
+        "sqlite-wal",
+        "general",
+        "pg-index",
+        "pg-timeout",
+        "empty"
+      ]
+    },
+    "Which SQLite pragma enables enforcement of foreign key constraints on a connection?": {
+      "auto": [
+        "pg-index",
+        "sqlite-fk",
+        "general",
+        "pg-timeout",
+        "empty"
+      ],
+      "lite": [
+        "sqlite-fk",
+        "general",
+        "pg-timeout",
+        "empty",
+        "pg-index"
+      ]
+    },
+    "Which Git command records a new commit that reverses an already shared commit?": {
+      "auto": [
+        "general",
+        "git-find",
+        "rust-lock",
+        "empty",
+        "git-undo"
+      ],
+      "lite": [
+        "general",
+        "git-find",
+        "rust-lock",
+        "empty",
+        "git-undo"
+      ]
+    },
+    "How can I locate the first bad Git commit by repeatedly testing halfway through history?": {
+      "auto": [
+        "git-find",
+        "general",
+        "git-undo",
+        "rust-lock",
+        "empty"
+      ],
+      "lite": [
+        "git-find",
+        "general",
+        "git-undo",
+        "rust-lock",
+        "empty"
+      ]
+    },
+    "How do I make Cargo fail if building would require changing the lockfile?": {
+      "auto": [
+        "rust-lock",
+        "general",
+        "git-undo",
+        "git-find",
+        "empty"
+      ],
+      "lite": [
+        "general",
+        "git-undo",
+        "git-find",
+        "empty",
+        "rust-lock"
+      ]
+    },
+    "How do I run Go tests with the race detector enabled?": {
+      "auto": [
+        "go-race",
+        "general",
+        "git-undo",
+        "git-find",
+        "empty"
+      ],
+      "lite": [
+        "go-race",
+        "general",
+        "git-undo",
+        "git-find",
+        "empty"
+      ]
+    },
+    "Where do HTTP semantics and browser docs define how long to wait after a 503?": {
+      "auto": [
+        "http-retry",
+        "retry-mdn",
+        "web-conditional",
+        "css-motion",
+        "empty"
+      ],
+      "lite": [
+        "http-retry",
+        "retry-mdn",
+        "web-conditional",
+        "css-motion",
+        "empty"
+      ]
+    },
+    "Which request header sends an ETag back to a server to revalidate a cached response?": {
+      "auto": [
+        "http-retry",
+        "web-conditional",
+        "etag-rfc",
+        "css-motion",
+        "empty"
+      ],
+      "lite": [
+        "web-conditional",
+        "etag-rfc",
+        "css-motion",
+        "empty",
+        "http-retry"
+      ]
+    },
+    "How can a web component respect an operating system preference for reduced animations?": {
+      "auto": [
+        "general",
+        "http-retry",
+        "web-conditional",
+        "empty",
+        "css-motion"
+      ],
+      "lite": [
+        "general",
+        "http-retry",
+        "web-conditional",
+        "empty",
+        "css-motion"
+      ]
+    }
+  },
+  "pages": {
+    "py-tasks": {
+      "id": "https://docs.python.org/3/library/asyncio-task.html#task-groups",
+      "url": "https://docs.python.org/3/library/asyncio-task.html#task-groups",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "TaskGroup waits for its children on exit. If one raises a non-cancellation error, the group cancels its remaining tasks."
+      ],
+      "summary": "Use asyncio.TaskGroup for structured concurrency and sibling cancellation."
+    },
+    "py-timeout": {
+      "id": "https://docs.python.org/3/library/asyncio-task.html#timeouts",
+      "url": "https://docs.python.org/3/library/asyncio-task.html#timeouts",
+      "publishedDate": "2024-03-21",
+      "highlights": [
+        "Wrap the await in async with asyncio.timeout(seconds) and handle TimeoutError outside the context."
+      ],
+      "summary": "Place a deadline around the await with asyncio.timeout."
+    },
+    "py-venv": {
+      "id": "https://docs.python.org/3/library/venv.html",
+      "url": "https://docs.python.org/3/library/venv.html",
+      "publishedDate": "2025-10-30",
+      "highlights": [
+        "Recreate the environment at its new path and reinstall dependencies rather than moving the directory."
+      ],
+      "summary": "Virtual environments are disposable and are not designed to be moved."
+    },
+    "pip-hashes": {
+      "id": "https://pip.pypa.io/en/stable/topics/secure-installs/",
+      "url": "https://pip.pypa.io/en/stable/topics/secure-installs/",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "Use --require-hashes and pin and hash every requirement, including transitive dependencies."
+      ],
+      "summary": "Hash-checking mode verifies each distribution against the supplied digests."
+    },
+    "packaging-entry": {
+      "id": "https://packaging.python.org/en/latest/guides/writing-pyproject-toml/",
+      "url": "https://packaging.python.org/en/latest/guides/writing-pyproject-toml/",
+      "publishedDate": "2024-03-21",
+      "highlights": [
+        "Map the executable name to a Python function under [project.scripts]."
+      ],
+      "summary": "A command-line entry point belongs in project.scripts."
+    },
+    "k8-ready": {
+      "id": "https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/",
+      "url": "https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/",
+      "publishedDate": "2025-10-30",
+      "highlights": [
+        "A failing readiness probe marks the pod unready for Service traffic; unlike a liveness failure it does not restart the container."
+      ],
+      "summary": "Use a readiness probe to distinguish not-ready from unhealthy."
+    },
+    "k8-drain": {
+      "id": "https://kubernetes.io/docs/concepts/workloads/pods/disruptions/",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/disruptions/",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "A PodDisruptionBudget sets the tolerated number of voluntary disruptions for selected pods."
+      ],
+      "summary": "A disruption budget constrains evictions during maintenance."
+    },
+    "k8-rollout": {
+      "id": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/",
+      "publishedDate": "2024-03-21",
+      "highlights": [
+        "Use kubectl rollout undo deployment/NAME to roll back to the preceding revision."
+      ],
+      "summary": "Deployments retain a revision history that supports rollback."
+    },
+    "k8-resources": {
+      "id": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+      "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+      "publishedDate": "2025-10-30",
+      "highlights": [
+        "The scheduler checks resource requests when deciding if the pod fits on a node, not observed CPU usage."
+      ],
+      "summary": "Requests guide placement; limits bound runtime consumption."
+    },
+    "docker-cache": {
+      "id": "https://docs.docker.com/build/cache/optimize/",
+      "url": "https://docs.docker.com/build/cache/optimize/",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "Use RUN --mount=type=cache,target=/path/to/cache to reuse a package cache across builds."
+      ],
+      "summary": "A cache mount persists package downloads independently of the final layer."
+    },
+    "docker-context": {
+      "id": "https://docs.docker.com/build/concepts/context/",
+      "url": "https://docs.docker.com/build/concepts/context/",
+      "publishedDate": "2024-03-21",
+      "highlights": [
+        "A .dockerignore file excludes matching files before the build context is sent."
+      ],
+      "summary": "Use .dockerignore patterns to keep local artifacts out."
+    },
+    "docker-signal": {
+      "id": "https://docs.docker.com/reference/dockerfile/#entrypoint",
+      "url": "https://docs.docker.com/reference/dockerfile/#entrypoint",
+      "publishedDate": "2025-10-30",
+      "highlights": [
+        "Use the exec form of ENTRYPOINT to run the program without an intermediate shell."
+      ],
+      "summary": "The exec form forwards operating system signals directly to the process."
+    },
+    "pg-index": {
+      "id": "https://www.postgresql.org/docs/current/sql-createindex.html",
+      "url": "https://www.postgresql.org/docs/current/sql-createindex.html",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "CREATE INDEX CONCURRENTLY allows ordinary inserts and updates while the index is built."
+      ],
+      "summary": "Build the index concurrently when blocking writers is unacceptable."
+    },
+    "pg-timeout": {
+      "id": "https://www.postgresql.org/docs/current/runtime-config-client.html",
+      "url": "https://www.postgresql.org/docs/current/runtime-config-client.html",
+      "publishedDate": "2024-03-21",
+      "highlights": [
+        "lock_timeout cancels a statement that waits too long to acquire a lock."
+      ],
+      "summary": "Set lock_timeout rather than imposing a whole-statement deadline."
+    },
+    "pg-plan": {
+      "id": "https://www.postgresql.org/docs/current/using-explain.html",
+      "url": "https://www.postgresql.org/docs/current/using-explain.html",
+      "publishedDate": "2025-10-30",
+      "highlights": [
+        "EXPLAIN ANALYZE executes the query and reports actual timing and row counts."
+      ],
+      "summary": "Measure the real run with EXPLAIN (ANALYZE); be careful with statements that write data."
+    },
+    "sqlite-wal": {
+      "id": "https://sqlite.org/wal.html",
+      "url": "https://sqlite.org/wal.html",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "In WAL mode, new writes go to the write-ahead log while readers keep using a consistent snapshot."
+      ],
+      "summary": "WAL improves concurrency between readers and a writer."
+    },
+    "sqlite-fk": {
+      "id": "https://sqlite.org/foreignkeys.html",
+      "url": "https://sqlite.org/foreignkeys.html",
+      "publishedDate": "2024-03-21",
+      "highlights": [
+        "Enable enforcement separately for each connection with PRAGMA foreign_keys = ON."
+      ],
+      "summary": "Foreign key checking is a connection-level setting."
+    },
+    "git-undo": {
+      "id": "https://git-scm.com/docs/git-revert",
+      "url": "https://git-scm.com/docs/git-revert",
+      "publishedDate": "2025-10-30",
+      "highlights": [
+        "git revert makes another commit that undoes the selected change without rewriting the shared history."
+      ],
+      "summary": "Use git revert on a published commit."
+    },
+    "git-find": {
+      "id": "https://git-scm.com/docs/git-bisect",
+      "url": "https://git-scm.com/docs/git-bisect",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "git bisect asks you to classify successive revisions as good or bad and narrows down the range."
+      ],
+      "summary": "Bisect the history between a known good and a known bad revision."
+    },
+    "rust-lock": {
+      "id": "https://doc.rust-lang.org/cargo/commands/cargo-build.html",
+      "url": "https://doc.rust-lang.org/cargo/commands/cargo-build.html",
+      "publishedDate": "2024-03-21",
+      "highlights": [
+        "The --locked flag prevents Cargo from changing the dependency resolution in Cargo.lock."
+      ],
+      "summary": "Pass --locked to require an existing, up-to-date lockfile."
+    },
+    "go-race": {
+      "id": "https://go.dev/doc/articles/race_detector",
+      "url": "https://go.dev/doc/articles/race_detector",
+      "publishedDate": "2025-10-30",
+      "highlights": [
+        "Run go test -race to instrument the tested code for data races."
+      ],
+      "summary": "Build and run the test binary with -race enabled."
+    },
+    "http-retry": {
+      "id": "https://www.rfc-editor.org/rfc/rfc9110.html#name-retry-after",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html#name-retry-after",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "Retry-After can encode either an HTTP date or a nonnegative number of seconds."
+      ],
+      "summary": "The 503 response can include Retry-After to suggest a delay."
+    },
+    "web-conditional": {
+      "id": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/If-None-Match",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/If-None-Match",
+      "publishedDate": "2024-03-21",
+      "highlights": [
+        "Send the saved ETag in If-None-Match to validate a stored response."
+      ],
+      "summary": "Use If-None-Match for entity-tag validation."
+    },
+    "css-motion": {
+      "id": "https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion",
+      "publishedDate": "2025-10-30",
+      "highlights": [
+        "Use the prefers-reduced-motion media feature to provide a less animated variant."
+      ],
+      "summary": "Respond to the reduced-motion preference with a media query."
+    },
+    "retry-mdn": {
+      "id": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Retry-After",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Retry-After",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "Retry-After describes when the client may try the request again."
+      ],
+      "summary": "Retry-After gives guidance to the client after an unavailable response."
+    },
+    "etag-rfc": {
+      "id": "https://www.rfc-editor.org/rfc/rfc9110.html#name-if-none-match",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html#name-if-none-match",
+      "publishedDate": "2024-03-21",
+      "highlights": [
+        "If-None-Match supplies entity tags to make a request conditional."
+      ],
+      "summary": "A client can revalidate using If-None-Match."
+    },
+    "empty": {
+      "id": "https://example.org/support-index",
+      "url": "https://example.org/support-index",
+      "publishedDate": "2025-10-30",
+      "highlights": [],
+      "summary": ""
+    },
+    "general": {
+      "id": "https://example.org/release-notes",
+      "url": "https://example.org/release-notes",
+      "publishedDate": "2022-07-11",
+      "highlights": [
+        "Consult the release notes for the version installed in your environment."
+      ],
+      "summary": "Release documentation can clarify version-specific behavior."
+    }
+  }
+}

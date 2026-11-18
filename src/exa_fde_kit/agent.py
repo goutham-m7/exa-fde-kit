@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from time import monotonic
@@ -51,6 +52,13 @@ def public_link(value: object) -> bool:
         return False
 
 
+_COMMON = set("the and for from with this that which what how does should can use are into without".split())
+
+
+def terms(text: str) -> set[str]:
+    return {t for t in re.findall(r"\w+", text.casefold()) if len(t) > 2 and t not in _COMMON}
+
+
 def research(client: Client, question: str, config: Config = Config()) -> Answer:
     question = question.strip()
     if not question:
@@ -68,13 +76,16 @@ def research(client: Client, question: str, config: Config = Config()) -> Answer
             if config.mode == "highlights":
                 options["maxCharacters"] = 700
             pages = client.post("contents", {"ids": a.urls, config.mode: options}, a.calls)
-            failed = {s.get("id") for s in pages.get("statuses", []) if s.get("status") != "success"}
-            by_url = {r.get("id") or r.get("url"): r for r in pages["results"]}
-            cited = set()
+            failed = {s["id"] for s in pages.get("statuses", [])
+                      if isinstance(s.get("id"), str) and s.get("status") != "success"}
+            by_url = {key: r for r in pages["results"]
+                      if isinstance(key := r.get("id") or r.get("url"), str)}
+            query_terms = terms(question)
+            candidates: dict[str, tuple[int, Citation]] = {}
             for url in a.urls:
                 r = by_url.get(url, {})
                 actual = r.get("url")
-                if url in failed or not public_link(actual) or actual in failed or actual in cited:
+                if url in failed or not public_link(actual) or actual in failed:
                     continue
                 chunks = r.get("highlights") if config.mode == "highlights" else [r.get("summary")]
                 if not isinstance(chunks, list):
@@ -82,12 +93,15 @@ def research(client: Client, question: str, config: Config = Config()) -> Answer
                 for chunk in chunks:
                     if isinstance(chunk, str):
                         text = " ".join("".join(c for c in chunk if c.isprintable() or c.isspace()).split())
-                        if text:
-                            a.citations.append(Citation(actual, text[:700]))
-                            cited.add(actual)
-                            break
-                if len(a.citations) == 3:
-                    break
+                        text = text[:700]
+                        rank = len(query_terms & terms(text))
+                        if text and (actual not in candidates or rank > candidates[actual][0]):
+                            candidates[actual] = (rank, Citation(actual, text))
+            if candidates:
+                # Keep equally strong evidence in retrieval order. If the query was paraphrased
+                # and no terms overlap, defer to search rank rather than guessing a new rank.
+                best = max(rank for rank, _ in candidates.values())
+                a.citations = [c for rank, c in candidates.values() if rank == best][:3 if best else 1]
     except ApiError as exc:
         a.error = str(exc)
     a.elapsed_ms = (monotonic() - start) * 1000
