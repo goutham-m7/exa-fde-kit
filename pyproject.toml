@@ -1,0 +1,21 @@
+[build-system]
+requires = ["uv_build>=0.9,<0.14"]
+build-backend = "uv_build"
+
+[project]
+name = "exa-fde-kit"
+version = "0.1.0"
+description = "A cited developer-support research agent and paired retrieval benchmark"
+requires-python = ">=3.11"
+dependencies = ["httpx>=0.28.1,<0.29"]
+license = "MIT"
+
+[project.scripts]
+exa-fde-kit = "exa_fde_kit.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
