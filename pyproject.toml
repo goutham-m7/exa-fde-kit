@@ -6,6 +6,7 @@ build-backend = "uv_build"
 name = "exa-fde-kit"
 version = "0.1.0"
 description = "A cited developer-support research agent and paired retrieval benchmark"
+readme = "README.md"
 requires-python = ">=3.11"
 dependencies = ["httpx>=0.28.1,<0.29"]
 license = "MIT"
