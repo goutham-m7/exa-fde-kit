@@ -98,6 +98,9 @@ class Client:
         self.namespace = hashlib.sha256((mode + ":" + http.headers.get("x-api-key", "")).encode()).hexdigest()
 
     def post(self, endpoint: str, body: dict, calls: list[Call]) -> dict:
+        if endpoint not in {"search", "contents"}:
+            raise ValueError("only search and contents are supported")
+
         def record(attempt, status, start, usd=None, basis="unknown", cached=False):
             call = Call(endpoint, attempt, status, (time.monotonic() - start) * 1000, usd, basis, cached)
             calls.append(call)

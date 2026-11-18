@@ -53,7 +53,7 @@ def main() -> int:
                           transport=replay_transport() if args.offline else None) as http:
             client = Client(http, cache_dir=cache_dir, mode="synthetic" if args.offline else "live")
             if args.cmd == "ask":
-                q = args.question or next(c.question for c in load_cases() if c.id == args.case)
+                q = next(c.question for c in load_cases() if c.id == args.case) if args.case else args.question
                 a = research(client, q, PRESETS[args.preset])
                 label = "SYNTHETIC FIXTURE — not live evidence" if args.offline else "LIVE SOURCES (local cache may apply)"
                 print(f"{label}\n{q}\n")

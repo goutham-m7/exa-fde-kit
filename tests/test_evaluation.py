@@ -1,4 +1,3 @@
-import json
 import socket
 import sys
 
@@ -28,7 +27,7 @@ def test_replay_has_no_live_fallback():
         assert res.status_code == 404
 
 
-def test_full_offline_report_without_key_or_socket(tmp_path, monkeypatch, capsys):
+def test_full_offline_report_without_key_or_socket(tmp_path, monkeypatch):
     monkeypatch.delenv("EXA_API_KEY", raising=False)
     def no_connect(*args):
         pytest.fail("offline replay opened a network connection")
@@ -49,3 +48,9 @@ def test_live_execution_requires_key(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["exa-fde-kit", "ask", "question"])
     assert main() == 2
     assert "EXA_API_KEY" in capsys.readouterr().err
+
+
+def test_empty_question_fails_cleanly(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["exa-fde-kit", "ask", "--offline", ""])
+    assert main() == 2
+    assert "question must not be empty" in capsys.readouterr().err

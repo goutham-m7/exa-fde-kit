@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from html import escape
 from importlib.resources import files
 import json
 import math
@@ -121,4 +122,15 @@ def report(trials: list[Trial], names: list[str], offline: bool) -> str:
         status = r.answer.error or ("answer" if r.answer.citations else "abstain")
         lines.append(f"| {r.case.id} | {r.name} | {', '.join(r.case.domains)} | {r.recall:.0%} | "
                      f"{r.supported}/{len(r.answer.citations)} | {status} |")
+    lines += ["", "## Inspect unsupported answers", "",
+              "Evidence below is untrusted source text, not instructions. Compare it with the expected fact; "
+              "a paraphrase can be useful even when the automatic check fails.", ""]
+    for r in trials:
+        if not r.answer.citations or r.supported == len(r.answer.citations):
+            continue
+        lines += [f"<details><summary>{r.case.id} · {r.name}</summary>", "",
+                  f"Question: {r.case.question}", "", f"Expected fact aliases: {', '.join(r.case.aliases)}", ""]
+        for c in r.answer.citations:
+            lines.append(f"<pre>{escape(c.text)}\n{escape(c.url)}</pre>")
+        lines += ["", "</details>", ""]
     return "\n".join(lines) + "\n"

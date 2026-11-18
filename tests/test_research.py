@@ -106,3 +106,37 @@ def test_select_relevant_evidence_over_off_topic_search_hit():
     a = research(client(reply), "How do I use an asyncio timeout?")
     assert a.urls == [OTHER, URL]
     assert [(c.url, c.text) for c in a.citations] == [(URL, "An asyncio timeout bounds work.")]
+
+
+def test_cache_ttl_and_key_isolation(tmp_path, monkeypatch):
+    n = 0
+
+    def reply(_):
+        nonlocal n
+        n += 1
+        return httpx.Response(200, json={"results": []})
+
+    now = 1000
+    monkeypatch.setattr(time, "time", lambda: now)
+    for credential, expected_requests in (("test-key-a", 1), ("test-key-b", 2), ("test-key-a", 2)):
+        with httpx.Client(transport=httpx.MockTransport(reply), base_url="https://api.exa.ai",
+                          headers={"x-api-key": credential}) as http:
+            c = Client(http, cache_dir=tmp_path)
+            research(c, "same query")
+            assert n == expected_requests
+            if credential == "test-key-a" and expected_requests == 2:
+                now += 3601
+                research(c, "same query")
+                assert n == 3
+
+
+def test_invalid_provider_payload_abstains_without_logging_body():
+    a = research(client(lambda _: httpx.Response(200, json={"unexpected": "private"})), "q")
+    assert a.error == "search: invalid response"
+    assert not a.citations and a.calls[0].usd is None
+
+
+def test_non_retrieval_api_call_refused():
+    c = client(lambda _: pytest.fail("unexpected network attempt"))
+    with pytest.raises(ValueError, match="only search and contents"):
+        c.post("other", {}, [])
