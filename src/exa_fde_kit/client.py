@@ -84,11 +84,16 @@ def cost(endpoint: str, body: dict, data: dict) -> tuple[float, str]:
 
 
 class Client:
-    def __init__(self, http: httpx.Client, *, concurrency: int = 4,
+    def __init__(self, http: httpx.Client, *, concurrency: int = 4, qps: float | None = None,
                  cache_dir: Path | None = None, mode: str = "live",
                  sleep: Callable[[float], None] = time.sleep):
         if concurrency < 1:
             raise ValueError("concurrency must be positive")
+        if qps is not None and (not math.isfinite(qps) or qps <= 0):
+            raise ValueError("qps must be finite and positive")
+        self._interval = 1 / qps if qps else 0.
+        self._admission = threading.Lock()
+        self._next_token = self._cooldown = 0.
         self.http = http
         self.semaphore = threading.BoundedSemaphore(concurrency)
         self.cache = Cache(cache_dir) if cache_dir else None
@@ -97,6 +102,19 @@ class Client:
         # Separate live keys and fixtures, including for library callers sharing a cache.
         self.namespace = hashlib.sha256((mode + ":" + http.headers.get("x-api-key", "")).encode()).hexdigest()
 
+    def _admit(self) -> None:
+        """One-token bucket. Recheck the shared deadline after every wait."""
+        while True:
+            with self._admission:
+                now = time.monotonic()
+                if self._cooldown - now > 10:
+                    raise ApiError("client: Retry-After exceeds wait budget")
+                delay = max(self._cooldown, self._next_token) - now
+                if delay <= 0:
+                    self._next_token = now + self._interval
+                    return
+            time.sleep(delay)
+
     def post(self, endpoint: str, body: dict, calls: list[Call]) -> dict:
         if endpoint not in {"search", "contents"}:
             raise ValueError("only search and contents are supported")
@@ -104,7 +122,8 @@ class Client:
         def record(attempt, status, start, usd=None, basis="unknown", cached=False):
             call = Call(endpoint, attempt, status, (time.monotonic() - start) * 1000, usd, basis, cached)
             calls.append(call)
-            LOG.info(json.dumps({"event": "exa_call", "mode": self.mode, **asdict(call)}))
+            LOG.info(json.dumps({"event": "exa_call", "mode": self.mode,
+                                 "timestamp": datetime.now(timezone.utc).isoformat(), **asdict(call)}))
 
         if self.cache:
             start = time.monotonic()
@@ -116,12 +135,17 @@ class Client:
 
         for attempt in range(1, 4):
             with self.semaphore:
+                self._admit()
                 start = time.monotonic()
                 try:
                     response = self.http.post("/" + endpoint, json=body)
                 except httpx.RequestError as exc:
                     record(attempt, type(exc).__name__, start)
                     raise ApiError(f"{endpoint}: {type(exc).__name__}") from None
+                floor = retry_floor(response.headers.get("Retry-After"))
+                if response.status_code == 429 and floor:
+                    with self._admission:
+                        self._cooldown = max(self._cooldown, time.monotonic() + floor)
             status = response.status_code
             if status == 200:
                 try:
@@ -141,7 +165,6 @@ class Client:
                 return data
 
             record(attempt, status, start)
-            floor = retry_floor(response.headers.get("Retry-After"))
             if (status != 429 and not 500 <= status < 600) or attempt == 3 or floor > 10:
                 raise ApiError(f"{endpoint}: HTTP {status}")
             self.sleep(floor + random.uniform(0, 0.5 * 2 ** (attempt - 1)))
