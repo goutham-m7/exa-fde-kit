@@ -22,6 +22,7 @@ PRESETS = {
     "wide": Config(k=5),
     "summary": Config(mode="summary"),
     "recent": Config(since="2024-01-01T00:00:00Z"),
+    "lite-summary": Config(search_type="lite", mode="summary"),
 }
 
 

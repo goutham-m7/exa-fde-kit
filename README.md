@@ -36,6 +36,29 @@ uv run exa-fde-kit eval --output reports/live.md
 
 The benchmark is serial with cache disabled. At the documented rates used by this estimator, the full matrix with all requested pages and no retries models about **$1.18**. This is a planning figure, **not a spending cap or quote**. Check contract pricing, trial limits and your budget before running. Exit codes: 0 completed (possibly a genuine no-evidence abstention); 1 provider/replay error (eval still writes the report); 2 missing configuration, invalid input or local I/O failure.
 
+## Live results (19 Nov 2026, run from Hyderabad, India)
+
+One serial pass, 24 cases per preset, cache disabled. Full reports: `reports/live-full.md` and `reports/live-lite-summary.md`. Total cost: about **$1.34**.
+
+| Preset | Domain recall@k | Supported answers | p50 | p95 | USD / question |
+|---|---:|---:|---:|---:|---:|
+| baseline (auto, k=3, highlights) | 87.5% | 11/24 | 0.74 s | 3.17 s | $0.010 |
+| **lite** (k=3, highlights) | 91.7% | 11/24 | 0.80 s | **1.12 s** | **$0.007** |
+| wide (auto, k=5, highlights) | 93.8% | 9/24 | 2.40 s | 4.42 s | $0.012 |
+| **summary** (auto, k=3, summaries) | 87.5% | **17/24** | 3.45 s | 5.08 s | $0.010 |
+| recent (auto, k=3, published ≥ 2024) | **52.1%** | 7/24 | 2.38 s | 6.64 s | $0.010 |
+| **lite-summary** (lite, k=3, summaries; follow-up run) | 91.7% | **16/24** | 2.46 s | 3.35 s | **$0.007** |
+
+What I'd tell a customer from this run:
+
+1. **Retrieval was rarely the bottleneck; the content view was.** Recall stayed at 87-94% across settings, but supported answers went from 11/24 with highlights to 17/24 with summaries. Fix how evidence is extracted before buying more results.
+2. **More results didn't help.** k=5 raised recall a little (93.8%) but lowered supported answers (9/24) and raised latency and cost. More context diluted the answer.
+3. **A publication-date filter is a trap for documentation queries.** "Published since 2024" cut recall to 52%, because canonical docs pages are old or undated. Use date filters for news, not reference material.
+4. **For latency-sensitive agents from India, lite gave the tightest tail**: p95 1.1 s against 3.2 s for auto, at 30% lower cost, with slightly higher recall (91.7% vs 87.5%).
+5. **Best overall trade-off: lite search + summaries.** A follow-up run kept 16/24 supported answers (vs 17/24 for auto + summaries) at **30% lower cost** and a **34% lower p95** (3.35 s vs 5.08 s). Use summary for quality-first agents, lite-summary for cost or latency budgets, and plain lite where only fast links are needed. Repeat across time windows before deciding.
+
+Limits: 24 hand-labeled cases and a single pass. p95 is one tail observation. "Supported" is a string-match proxy (expected domain + labeled fact), not an entailment judge. These are numbers from one region at one time, not Exa benchmarks.
+
 ## Use it as a tool in a customer's agent
 
 Call this from the server-side tool handler. Reuse one client per credential so workers share its connection pool and concurrency gate. The host agent should display the exact evidence and URLs, never let a passage select a tool, and hand an empty result to a human. The code below deliberately disables local persistence.

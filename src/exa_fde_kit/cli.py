@@ -25,7 +25,7 @@ def main() -> int:
     ask.add_argument("--preset", choices=PRESETS, default="baseline")
     ask.add_argument("--no-cache", action="store_true", help="do not persist request results")
     bench = sub.add_parser("eval", help="run the benchmark; live mode can incur charges")
-    bench.add_argument("--preset", choices=PRESETS, help="only run this preset (default: all five)")
+    bench.add_argument("--preset", choices=PRESETS, help="only run this preset (default: all presets)")
     bench.add_argument("--limit", type=int, choices=range(1, len(load_cases()) + 1), metavar="N")
     bench.add_argument("--output", type=Path, help="default: reports/{synthetic,live}.md")
     for p in [ask, bench]:
