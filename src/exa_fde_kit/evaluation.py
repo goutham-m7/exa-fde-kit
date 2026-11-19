@@ -2,19 +2,29 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import argparse
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from html import escape
 from importlib.resources import files
 import json
-import math
+import os
+from pathlib import Path
 import random
-import re
+import sys
+from time import sleep
 from statistics import mean
 from urllib.parse import urlsplit
 
+import httpx
+
 from .agent import Answer, Config, research
 from .client import Client
+from .judge import contains_alias
+from .replay import replay_transport
+from .report_html import render
+from .router import Budget, cascade
+from .stats import Observation, percentile as percentile
 
 PRESETS = {
     "baseline": Config(),
@@ -32,10 +42,17 @@ class Case:
     question: str
     domains: list[str]
     aliases: list[str]
+    language: str = "en"
+    verification_url: str = ""
+    verified_on: str = ""
+    verified_fact: str = ""
 
 
-def load_cases() -> list[Case]:
-    data = files(__package__).joinpath("data/cases.json").read_bytes()
+def load_cases(dataset: str = "english") -> list[Case]:
+    datasets = {"english": "cases.json", "apj": "apj.json"}
+    if dataset not in datasets:
+        raise ValueError(f"unknown dataset: {dataset}")
+    data = files(__package__).joinpath("data", datasets[dataset]).read_bytes()
     return [Case(**row) for row in json.loads(data)]
 
 
@@ -48,15 +65,10 @@ def score(case: Case, answer: Answer, k: int) -> tuple[float, int]:
     hits = sum(any(matches(url, d) for url in answer.urls[:k]) for d in case.domains)
     supported = sum(
         any(matches(c.url, d) for d in case.domains)
-        and any(re.search(r"(?<!\w)" + re.escape(a) + r"(?!\w)", c.text, re.IGNORECASE) is not None
-                for a in case.aliases)
+        and contains_alias(c.text, tuple(case.aliases))
         for c in answer.citations
     )
     return hits / len(case.domains), supported
-
-
-def percentile(values: list[float], fraction: float) -> float:
-    return sorted(values)[max(0, math.ceil(len(values) * fraction) - 1)]
 
 
 @dataclass(frozen=True)
@@ -66,24 +78,39 @@ class Trial:
     answer: Answer
     recall: float
     supported: int
+    escalated: bool = False
 
     @property
-    def known_usd(self):
+    def known_usd(self) -> float:
         return sum(c.usd for c in self.answer.calls if c.usd is not None)
 
+    def observation(self, window: str) -> Observation:
+        return Observation(
+            self.case.id, self.name, window, self.recall, bool(self.supported),
+            self.answer.elapsed_ms, self.known_usd,
+            sum(c.usd is None for c in self.answer.calls), self.escalated,
+            bool(self.answer.error), not self.answer.citations,
+        )
 
-def evaluate(client: Client, cases: list[Case], names: list[str]) -> list[Trial]:
+
+def evaluate(client: Client, cases: list[Case], names: list[str], *,
+             seed: int = 42, budget: Budget = Budget()) -> list[Trial]:
     if client.cache:
         raise ValueError("benchmark must not share cached responses")
-    rng = random.Random(42)
+    rng = random.Random(seed)
     trials = []
     for case in cases:
         order = names.copy()
         rng.shuffle(order)
         for name in order:
-            cfg = PRESETS[name]
-            answer = research(client, case.question, cfg)
-            trials.append(Trial(name, case, answer, *score(case, answer, cfg.k)))
+            escalated = False
+            if name == "router":
+                route = cascade(client, case.question, budget)
+                answer, escalated, k = route.answer, route.escalated, PRESETS["lite"].k
+            else:
+                config = PRESETS[name]
+                answer, k = research(client, case.question, config), config.k
+            trials.append(Trial(name, case, answer, *score(case, answer, k), escalated))
     return trials
 
 
@@ -103,7 +130,8 @@ def report(trials: list[Trial], names: list[str], offline: bool) -> str:
         times = [r.answer.elapsed_ms for r in rows]
         cited = sum(len(r.answer.citations) for r in rows)
         support = sum(r.supported for r in rows)
-        lines.append(f"| {name} | {len(rows)} | {PRESETS[name].k} | {mean(r.recall for r in rows):.1%} | "
+        k = PRESETS["lite" if name == "router" else name].k
+        lines.append(f"| {name} | {len(rows)} | {k} | {mean(r.recall for r in rows):.1%} | "
                      f"{support}/{cited} | {sum(r.supported > 0 for r in rows)}/{len(rows)} | "
                      f"{sum(not r.answer.citations for r in rows)} | {sum(bool(r.answer.error) for r in rows)} | "
                      f"{percentile(times, .50):.2f} | {percentile(times, .95):.2f} | "
@@ -115,6 +143,10 @@ def report(trials: list[Trial], names: list[str], offline: bool) -> str:
               "expected domains in the first k search results. Latencies include both stages, retries and failures (nearest rank).",
               "", "## Compared settings", ""]
     for name in names:
+        if name == "router":
+            routed = [t for t in trials if t.name == name]
+            lines.append(f"- **router:** lite → auto + summaries; {sum(t.escalated for t in routed)}/{len(routed)} escalated.")
+            continue
         cfg = PRESETS[name]
         lines.append(f"- **{name}:** {cfg.search_type}, k={cfg.k}, {cfg.mode}, published since {cfg.since or 'any time'}.")
     lines += ["", "## Case audit", "", "| Case | Preset | Expected domains | Recall | Supported / cited | Result |",
@@ -135,3 +167,67 @@ def report(trials: list[Trial], names: list[str], offline: bool) -> str:
             lines.append(f"<pre>{escape(c.text)}\n{escape(c.url)}</pre>")
         lines += ["", "</details>", ""]
     return "\n".join(lines) + "\n"
+
+
+def matrix_main(argv: list[str] | None = None) -> int:
+    """Run paired cold-cache windows; require explicit opt-in for live charges."""
+    parser = argparse.ArgumentParser(prog="python -m exa_fde_kit.evaluation")
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--offline", action="store_true", help="synthetic English replay only")
+    mode.add_argument("--live", action="store_true", help="charge EXA_API_KEY for each window")
+    parser.add_argument("--dataset", choices=["english", "apj"], default="english")
+    parser.add_argument("--presets", default=",".join([*PRESETS, "router"]))
+    parser.add_argument("--baseline", help="paired comparison reference; default: first listed preset")
+    parser.add_argument("--limit", type=int, choices=range(1, 25), default=24, metavar="N")
+    parser.add_argument("--repeat", type=int, default=1, help="number of full windows")
+    parser.add_argument("--wait-seconds", type=float, default=0, help="pause between windows")
+    parser.add_argument("--router-usd", type=float, default=Budget.usd)
+    parser.add_argument("--router-ms", type=float, default=Budget.latency_ms)
+    parser.add_argument("--output", type=Path, default=Path("reports/matrix.html"))
+    parser.add_argument("--observations", type=Path, help="also save per-case metrics (no source text)")
+    args = parser.parse_args(argv)
+    names = [s.strip() for s in args.presets.split(",")]
+    baseline = args.baseline or names[0]
+    if set(names) - {*PRESETS, "router"} or len(names) != len(set(names)) or baseline not in names:
+        parser.error("choose unique known presets including the baseline")
+    if args.repeat < 1 or not 0 <= args.wait_seconds < float("inf"):
+        parser.error("repeat must be positive; wait must be finite and non-negative")
+    if args.offline and args.dataset != "english":
+        parser.error("only the English dataset has a synthetic cassette")
+    if args.observations and args.output.resolve() == args.observations.resolve():
+        parser.error("HTML and observation paths must differ")
+    key = None if args.offline else os.environ.get("EXA_API_KEY", "").strip()
+    if args.live and not key:
+        parser.error("--live requires EXA_API_KEY")
+    try:
+        budget = Budget(args.router_usd, args.router_ms)
+        cases = load_cases(args.dataset)[:args.limit]
+        rows: list[Observation] = []
+        with httpx.Client(base_url="https://api.exa.ai", headers={"x-api-key": key} if key else {},
+                          timeout=httpx.Timeout(15, connect=4),
+                          transport=replay_transport() if args.offline else None) as http:
+            client = Client(http, mode="synthetic" if args.offline else "live")
+            for i in range(args.repeat):
+                if i:
+                    sleep(args.wait_seconds)
+                window = f"{i+1}: {datetime.now(timezone.utc).isoformat(timespec='seconds')}"
+                trials = evaluate(client, cases, names, seed=42+i, budget=budget)
+                rows.extend(trial.observation(window) for trial in trials)
+        label = ("SYNTHETIC REPLAY (not Exa latency; actual spend $0)" if args.offline else "LIVE API")
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(render(rows, f"{label} · {args.dataset}", baseline), encoding="utf-8")
+        if args.observations:
+            args.observations.parent.mkdir(parents=True, exist_ok=True)
+            metadata = {"mode": "synthetic" if args.offline else "live", "dataset": args.dataset}
+            args.observations.write_text(
+                "".join(json.dumps({**metadata, **asdict(r)}) + "\n" for r in rows), encoding="utf-8"
+            )
+        print(f"{label}: {len(rows)} observations → {args.output}")
+        return int(any(r.error for r in rows))
+    except (OSError, ValueError) as exc:
+        print(f"Could not complete matrix: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(matrix_main())

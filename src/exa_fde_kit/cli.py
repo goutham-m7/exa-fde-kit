@@ -1,6 +1,7 @@
 """Command-line interface. Offline mode never constructs a live transport."""
 
 import argparse
+from contextlib import nullcontext
 import logging
 import os
 from pathlib import Path
@@ -13,6 +14,7 @@ from .agent import research
 from .client import Client, LOG
 from .evaluation import PRESETS, evaluate, load_cases, report
 from .replay import replay_transport
+from .router import Budget, cascade
 from .telemetry import events, prometheus, query_trace, record_answer
 
 
@@ -23,7 +25,9 @@ def main() -> int:
     question = ask.add_mutually_exclusive_group(required=True)
     question.add_argument("question", nargs="?")
     question.add_argument("--case", choices=[c.id for c in load_cases()])
-    ask.add_argument("--preset", choices=PRESETS, default="baseline")
+    ask.add_argument("--preset", choices=[*PRESETS, "router"], default="baseline")
+    ask.add_argument("--router-usd", type=float, default=Budget.usd, help="cascade stage admission budget")
+    ask.add_argument("--router-ms", type=float, default=Budget.latency_ms, help="cascade stage admission deadline")
     ask.add_argument("--no-cache", action="store_true", help="do not persist request results")
     ask.add_argument("--tenant", help="pseudonymous tenant slug for correlated call and answer logs")
     metrics = sub.add_parser("metrics", help="summarise a call JSONL file as Prometheus text (offline)")
@@ -65,12 +69,16 @@ def main() -> int:
             client = Client(http, cache_dir=cache_dir, mode="synthetic" if args.offline else "live")
             if args.cmd == "ask":
                 q = next(c.question for c in load_cases() if c.id == args.case) if args.case else args.question
-                if args.tenant:
-                    with query_trace(args.tenant):
-                        a = research(client, q, PRESETS[args.preset])
+                with query_trace(args.tenant) if args.tenant else nullcontext():
+                    if args.preset == "router":
+                        route = cascade(client, q, Budget(args.router_usd, args.router_ms))
+                        a, summary = route.answer, route.selected == "summary"
+                        print(f"Route: {route.reason}; escalated={route.escalated}; selected={route.selected}")
+                    else:
+                        config = PRESETS[args.preset]
+                        a, summary = research(client, q, config), config.mode == "summary"
+                    if args.tenant:
                         record_answer(a, client.mode)
-                else:
-                    a = research(client, q, PRESETS[args.preset])
                 label = "SYNTHETIC FIXTURE — not live evidence" if args.offline else "LIVE SOURCES (local cache may apply)"
                 print(f"{label}\n{q}\n")
                 if a.error:
@@ -80,7 +88,7 @@ def main() -> int:
                 if not a.citations:
                     print("No usable evidence; abstaining.")
                 else:
-                    view = "Source summaries (generated, not direct quotes)" if PRESETS[args.preset].mode == "summary" else "Source passages"
+                    view = "Source summaries (generated, not direct quotes)" if summary else "Source passages"
                     print(view)
                     for i, cite in enumerate(a.citations, 1):
                         print(f"[{i}] {cite.text}")

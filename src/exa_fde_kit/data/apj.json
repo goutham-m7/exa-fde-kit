@@ -1,0 +1,350 @@
+[
+  {
+    "id": "aws-tokyo",
+    "language": "ja",
+    "question": "AWS の東京リージョンを CLI で指定するときのリージョンコードは何ですか？",
+    "domains": [
+      "docs.aws.amazon.com"
+    ],
+    "aliases": [
+      "ap-northeast-1"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html",
+    "verified_fact": "ap-northeast-1 identifies Asia Pacific (Tokyo)."
+  },
+  {
+    "id": "registry-kr",
+    "language": "ko",
+    "question": "IANA의 루트 존 데이터베이스에서 .kr 최상위 도메인을 관리하는 기관은 어디인가요?",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "KISA",
+      "Korea Internet & Security Agency",
+      "한국인터넷진흥원"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.iana.org/domains/root/db/kr.html",
+    "verified_fact": "Korea Internet & Security Agency is the manager of .kr."
+  },
+  {
+    "id": "currency-india",
+    "language": "hi",
+    "question": "Unicode CLDR के अनुसार भारतीय रुपये का तीन अक्षरों वाला मुद्रा कोड क्या है?",
+    "domains": [
+      "unicode.org"
+    ],
+    "aliases": [
+      "INR"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.unicode.org/cldr/charts/49/supplemental/detailed_territory_currency_information.html",
+    "verified_fact": "Indian Rupee has code INR."
+  },
+  {
+    "id": "zone-jakarta",
+    "language": "id",
+    "question": "Menurut basis data zona waktu IANA, pengenal zona waktu apa yang dipakai untuk Jakarta?",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "Asia/Jakarta"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://data.iana.org/time-zones/tzdb/zone1970.tab",
+    "verified_fact": "Jakarta is listed as Asia/Jakarta."
+  },
+  {
+    "id": "registry-cn",
+    "language": "zh-Hans",
+    "question": "在 IANA 根区数据库中，负责管理 .cn 顶级域的机构叫什么？",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "CNNIC",
+      "China Internet Network Information Center",
+      "中国互联网络信息中心"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.iana.org/domains/root/db/cn.html",
+    "verified_fact": "China Internet Network Information Center is the manager of .cn."
+  },
+  {
+    "id": "currency-vietnam",
+    "language": "vi",
+    "question": "Theo bảng tiền tệ Unicode CLDR, mã ba chữ cái của đồng Việt Nam là gì?",
+    "domains": [
+      "unicode.org"
+    ],
+    "aliases": [
+      "VND"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.unicode.org/cldr/charts/49/supplemental/detailed_territory_currency_information.html",
+    "verified_fact": "Vietnamese Dong has code VND."
+  },
+  {
+    "id": "aws-hyderabad",
+    "language": "en",
+    "question": "Which AWS region code should an SDK use for its Hyderabad endpoint?",
+    "domains": [
+      "docs.aws.amazon.com"
+    ],
+    "aliases": [
+      "ap-south-2"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html",
+    "verified_fact": "ap-south-2 identifies Asia Pacific (Hyderabad)."
+  },
+  {
+    "id": "registry-jp",
+    "language": "ja",
+    "question": "IANA の登録情報によると、.jp ドメインを管理している組織はどこですか？",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "Japan Registry Services",
+      "日本レジストリサービス",
+      "JPRS"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.iana.org/domains/root/db/jp.html",
+    "verified_fact": "Japan Registry Services is the manager of .jp."
+  },
+  {
+    "id": "zone-seoul",
+    "language": "ko",
+    "question": "서울의 현지 시각을 설정할 때 IANA 시간대 데이터베이스에서 사용하는 식별자는 무엇인가요?",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "Asia/Seoul"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://data.iana.org/time-zones/tzdb/zone1970.tab",
+    "verified_fact": "Seoul is listed as Asia/Seoul."
+  },
+  {
+    "id": "aws-mumbai",
+    "language": "hi",
+    "question": "AWS के दस्तावेज़ों में मुंबई रीजन का कोड क्या है?",
+    "domains": [
+      "docs.aws.amazon.com"
+    ],
+    "aliases": [
+      "ap-south-1"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html",
+    "verified_fact": "ap-south-1 identifies Asia Pacific (Mumbai)."
+  },
+  {
+    "id": "registry-id",
+    "language": "id",
+    "question": "Siapa pengelola domain tingkat atas .id dalam basis data zona akar IANA?",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "PANDI",
+      "Pengelola Nama Domain Internet Indonesia"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.iana.org/domains/root/db/id.html",
+    "verified_fact": "PANDI is the manager of .id."
+  },
+  {
+    "id": "zone-shanghai",
+    "language": "zh-Hans",
+    "question": "在 IANA 时区数据库中，上海对应的时区标识符是什么？",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "Asia/Shanghai"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://data.iana.org/time-zones/tzdb/zone1970.tab",
+    "verified_fact": "Shanghai is listed as Asia/Shanghai."
+  },
+  {
+    "id": "registry-vn",
+    "language": "vi",
+    "question": "Theo hồ sơ vùng gốc của IANA, tổ chức nào quản lý tên miền cấp cao .vn?",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "VNNIC",
+      "Viet Nam Internet Network Information Center",
+      "Trung tâm Internet Việt Nam"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.iana.org/domains/root/db/vn.html",
+    "verified_fact": "VNNIC is the manager of .vn."
+  },
+  {
+    "id": "registry-sg",
+    "language": "en",
+    "question": "Who manages the .sg country-code domain in the IANA root zone database?",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "Singapore Network Information Centre",
+      "SGNIC"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.iana.org/domains/root/db/sg.html",
+    "verified_fact": "Singapore Network Information Centre is the manager of .sg."
+  },
+  {
+    "id": "currency-japan",
+    "language": "ja",
+    "question": "Unicode CLDR で日本円を表す三文字の通貨コードは何ですか？",
+    "domains": [
+      "unicode.org"
+    ],
+    "aliases": [
+      "JPY"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.unicode.org/cldr/charts/49/supplemental/detailed_territory_currency_information.html",
+    "verified_fact": "Japanese Yen has code JPY."
+  },
+  {
+    "id": "aws-seoul",
+    "language": "ko",
+    "question": "AWS CLI에서 서울 리전을 지정하려면 어떤 리전 코드를 사용해야 하나요?",
+    "domains": [
+      "docs.aws.amazon.com"
+    ],
+    "aliases": [
+      "ap-northeast-2"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html",
+    "verified_fact": "ap-northeast-2 identifies Asia Pacific (Seoul)."
+  },
+  {
+    "id": "registry-in",
+    "language": "hi",
+    "question": "IANA के रिकॉर्ड में .in शीर्ष-स्तरीय डोमेन का प्रबंधक कौन है?",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "National Internet Exchange of India",
+      "NIXI",
+      "नेशनल इंटरनेट एक्सचेंज ऑफ इंडिया"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.iana.org/domains/root/db/in.html",
+    "verified_fact": "National Internet Exchange of India is the manager of .in."
+  },
+  {
+    "id": "currency-indonesia",
+    "language": "id",
+    "question": "Dalam Unicode CLDR, apa kode mata uang tiga huruf untuk rupiah Indonesia?",
+    "domains": [
+      "unicode.org"
+    ],
+    "aliases": [
+      "IDR"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.unicode.org/cldr/charts/49/supplemental/detailed_territory_currency_information.html",
+    "verified_fact": "Indonesian Rupiah has code IDR."
+  },
+  {
+    "id": "aws-taipei",
+    "language": "zh-Hans",
+    "question": "AWS 官方列出的亚太地区（台北）区域代码是什么？",
+    "domains": [
+      "docs.aws.amazon.com"
+    ],
+    "aliases": [
+      "ap-east-2"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html",
+    "verified_fact": "ap-east-2 identifies Asia Pacific (Taipei)."
+  },
+  {
+    "id": "zone-hochiminh",
+    "language": "vi",
+    "question": "Trong cơ sở dữ liệu múi giờ IANA, mã múi giờ cho Thành phố Hồ Chí Minh là gì?",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "Asia/Ho_Chi_Minh"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://data.iana.org/time-zones/tzdb/zone1970.tab",
+    "verified_fact": "Ho Chi Minh City is listed as Asia/Ho_Chi_Minh."
+  },
+  {
+    "id": "currency-singapore",
+    "language": "en",
+    "question": "In the Unicode CLDR currency table, what currency code identifies the Singapore dollar?",
+    "domains": [
+      "unicode.org"
+    ],
+    "aliases": [
+      "SGD"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.unicode.org/cldr/charts/49/supplemental/detailed_territory_currency_information.html",
+    "verified_fact": "Singapore Dollar has code SGD."
+  },
+  {
+    "id": "aws-osaka",
+    "language": "ja",
+    "question": "AWS CLI の設定で、大阪リージョンを表すコードは何ですか？",
+    "domains": [
+      "docs.aws.amazon.com"
+    ],
+    "aliases": [
+      "ap-northeast-3"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html",
+    "verified_fact": "ap-northeast-3 identifies Asia Pacific (Osaka)."
+  },
+  {
+    "id": "currency-korea",
+    "language": "ko",
+    "question": "유니코드 CLDR에서 대한민국 원화를 나타내는 세 글자 통화 코드는 무엇인가요?",
+    "domains": [
+      "unicode.org"
+    ],
+    "aliases": [
+      "KRW"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://www.unicode.org/cldr/charts/49/supplemental/detailed_territory_currency_information.html",
+    "verified_fact": "South Korean Won has code KRW."
+  },
+  {
+    "id": "zone-kolkata",
+    "language": "hi",
+    "question": "IANA समय क्षेत्र डेटाबेस की zone1970 तालिका में कोलकाता का पहचानकर्ता क्या है?",
+    "domains": [
+      "iana.org"
+    ],
+    "aliases": [
+      "Asia/Kolkata"
+    ],
+    "verified_on": "2026-11-19",
+    "verification_url": "https://data.iana.org/time-zones/tzdb/zone1970.tab",
+    "verified_fact": "Kolkata is listed as Asia/Kolkata."
+  }
+]
