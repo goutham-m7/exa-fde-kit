@@ -1,0 +1,304 @@
+{
+  "notice": "Original synthetic examples, manually specified reference labels during development. Not independent human annotation or held-out calibration. Labels ask whether all claim sentences follow from the cited text.",
+  "examples": [
+    {
+      "claim": "The south ferry carries bicycles.",
+      "passages": [
+        "The south ferry carries bicycles and luggage."
+      ],
+      "aliases": [
+        "bicycles"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "North depot holds 12 crates.",
+      "passages": [
+        "The north depot holds 12 sealed crates."
+      ],
+      "aliases": [
+        "12"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "The red locker does not accept coins.",
+      "passages": [
+        "The red locker does not accept coins."
+      ],
+      "aliases": [
+        "coins"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "Passes expire after 30 days.",
+      "passages": [
+        "Visitor passes expire after 30 days."
+      ],
+      "aliases": [
+        "30"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "The kiln operates at 720 degrees.",
+      "passages": [
+        "The kiln operates at 720 degrees."
+      ],
+      "aliases": [
+        "720"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "Rain closes the trail. Snow closes the bridge.",
+      "passages": [
+        "Rain closes the trail.",
+        "Snow closes the bridge."
+      ],
+      "aliases": [
+        "bridge"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "Stored copies last seven days.",
+      "passages": [
+        "Backups are retained for one week."
+      ],
+      "aliases": [
+        "one week"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "Entry is free.",
+      "passages": [
+        "Visitors pay nothing to enter."
+      ],
+      "aliases": [
+        "nothing"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "The clinic opens on Monday.",
+      "passages": [
+        "On Monday the clinic opens for visitors."
+      ],
+      "aliases": [
+        "Monday"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "The west line uses blue tickets.",
+      "passages": [
+        "Blue tickets are used on the west line."
+      ],
+      "aliases": [
+        "blue"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "Soda is not permitted.",
+      "passages": [
+        "Soda is not permitted in the hall."
+      ],
+      "aliases": [
+        "permitted"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "The summer pass costs 4.50 credits.",
+      "passages": [
+        "The summer pass costs 4.50 credits for visitors."
+      ],
+      "aliases": [
+        "4.50"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "The vault opens at sunrise.",
+      "passages": [
+        "At sunrise the vault opens."
+      ],
+      "aliases": [
+        "sunrise"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "The loan lasts a fortnight.",
+      "passages": [
+        "The standard loan period is two weeks."
+      ],
+      "aliases": [
+        "two weeks"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "Copper roofs cover both towers.",
+      "passages": [
+        "Copper roofs cover both towers."
+      ],
+      "aliases": [
+        "copper"
+      ],
+      "supported": true
+    },
+    {
+      "claim": "The garden opens on Friday.",
+      "passages": [
+        "The garden does not open on Friday."
+      ],
+      "aliases": [
+        "Friday"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "The blue shuttle seats 42 passengers.",
+      "passages": [
+        "The blue shuttle seats 24 passengers."
+      ],
+      "aliases": [
+        "24"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "The hall never admits children.",
+      "passages": [
+        "The hall admits children with tickets."
+      ],
+      "aliases": [
+        "children"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "The fee is 9.50 credits.",
+      "passages": [
+        "The fee is 9.05 credits."
+      ],
+      "aliases": [
+        "9.05"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "Pets are welcome. The pool closes at noon.",
+      "passages": [
+        "Pets are welcome in the lobby."
+      ],
+      "aliases": [
+        "pets"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "Mira supervises Rowan.",
+      "passages": [
+        "Rowan supervises Mira."
+      ],
+      "aliases": [
+        "supervises"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "The slope rises by 10%.",
+      "passages": [
+        "The slope rises by 10 meters."
+      ],
+      "aliases": [
+        "10"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "The freezer target is -4 degrees.",
+      "passages": [
+        "The freezer target is +4 degrees."
+      ],
+      "aliases": [
+        "degrees"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "Copper is heavier than iron.",
+      "passages": [
+        "Iron is heavier than copper."
+      ],
+      "aliases": [
+        "heavier"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "The beacon flashes twice.",
+      "passages": [],
+      "aliases": [
+        "twice"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "",
+      "passages": [
+        "The store accepts postcards."
+      ],
+      "aliases": [
+        "postcards"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "Orchids flower in winter.",
+      "passages": [
+        "Lamps light the courtyard at night."
+      ],
+      "aliases": [
+        "orchids"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "The night bus runs on holidays.",
+      "passages": [
+        "The night bus never runs on holidays."
+      ],
+      "aliases": [
+        "night bus"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "South depot holds 15 crates.",
+      "passages": [
+        "South depot holds 10 crates. North depot holds 15 crates."
+      ],
+      "aliases": [
+        "crates"
+      ],
+      "supported": false
+    },
+    {
+      "claim": "The door closes at 18:30.",
+      "passages": [
+        "The door closes at 18:00."
+      ],
+      "aliases": [
+        "door"
+      ],
+      "supported": false
+    }
+  ]
+}

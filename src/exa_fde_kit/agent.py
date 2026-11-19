@@ -18,7 +18,7 @@ class Config:
     mode: str = "highlights"
     since: str | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.search_type not in {"auto", "lite"} or self.mode not in {"highlights", "summary"}:
             raise ValueError("unsupported search or contents mode")
         if not 1 <= self.k <= 10:
@@ -40,6 +40,8 @@ class Answer:
     calls: list[Call] = field(default_factory=list)
     elapsed_ms: float = 0
     error: str | None = None
+    # One candidate per distinct returned URL, including runners-up used by the router.
+    passages: list[Citation] = field(default_factory=list)
 
 
 def public_link(value: object) -> bool:
@@ -53,10 +55,16 @@ def public_link(value: object) -> bool:
 
 
 _COMMON = set("the and for from with this that which what how does should can use are into without".split())
+_CJK = re.compile(r"[\u3040-\u30ff\u3400-\u9fff]+")
 
 
 def terms(text: str) -> set[str]:
-    return {t for t in re.findall(r"\w+", text.casefold()) if len(t) > 2 and t not in _COMMON}
+    # Japanese and Chinese runs do not have whitespace-separated word boundaries.
+    folded = text.casefold()
+    result = {t for t in re.findall(r"\w+", _CJK.sub(" ", folded)) if len(t) > 2 and t not in _COMMON}
+    for run in _CJK.findall(folded):
+        result.update(run[i:i + 2] for i in range(max(1, len(run) - 1)))
+    return result
 
 
 def research(client: Client, question: str, config: Config = Config()) -> Answer:
@@ -72,7 +80,7 @@ def research(client: Client, question: str, config: Config = Config()) -> Answer
         hits = client.post("search", search, a.calls)["results"]
         a.urls = list(dict.fromkeys(r["url"] for r in hits[:config.k] if public_link(r.get("url"))))
         if a.urls:
-            options = {"query": question}
+            options: dict[str, str | int] = {"query": question}
             if config.mode == "highlights":
                 options["maxCharacters"] = 700
             pages = client.post("contents", {"ids": a.urls, config.mode: options}, a.calls)
@@ -101,6 +109,7 @@ def research(client: Client, question: str, config: Config = Config()) -> Answer
                 # Keep equally strong evidence in retrieval order. If the query was paraphrased
                 # and no terms overlap, defer to search rank rather than guessing a new rank.
                 best = max(rank for rank, _ in candidates.values())
+                a.passages = [c for _, c in candidates.values()]
                 a.citations = [c for rank, c in candidates.values() if rank == best][:3 if best else 1]
     except ApiError as exc:
         a.error = str(exc)
