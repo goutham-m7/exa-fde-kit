@@ -9,7 +9,7 @@ import sqlite3
 from . import Inbox, definition, receiver
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="cmd", required=True)
     define = sub.add_parser("definition", help="print request bodies; create no resources")

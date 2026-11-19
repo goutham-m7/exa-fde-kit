@@ -4,7 +4,7 @@ from dataclasses import asdict
 import json
 import os
 import sys
-from typing import TextIO
+from typing import Any, TextIO
 
 import httpx
 
@@ -21,11 +21,11 @@ SCHEMA = {"type": "object", "properties": {"query": {"type": "string", "minLengt
           "required": ["query"], "additionalProperties": False}
 
 
-def error(req_id, code, message):
+def error(req_id: str | int | None, code: int, message: str) -> dict[str, Any]:
     return {"jsonrpc": "2.0", "id": req_id, "error": {"code": code, "message": message}}
 
 
-def call_tool(client: Client, name: str, args: object) -> dict:
+def call_tool(client: Client, name: str, args: object) -> dict[str, Any]:
     try:
         if (not isinstance(args, dict) or args.keys() != {"query"} or not isinstance(args["query"], str)
                 or not args["query"].strip() or len(args["query"]) > 2000):
@@ -34,7 +34,7 @@ def call_tool(client: Client, name: str, args: object) -> dict:
         if name == "search_with_citations":
             hits = client.post("search", {"query": q, "type": "auto", "numResults": 3}, [])["results"]
             urls = list(dict.fromkeys(h["url"] for h in hits[:3] if public_link(h.get("url"))))
-            result = {"sources": [{"rank": i, "url": url} for i, url in enumerate(urls, 1)]}
+            result: dict[str, Any] = {"sources": [{"rank": i, "url": url} for i, url in enumerate(urls, 1)]}
         else:
             answer = research(client, q)
             if answer.error:
@@ -48,7 +48,7 @@ def call_tool(client: Client, name: str, args: object) -> dict:
 def serve(client: Client, inp: TextIO, out: TextIO) -> None:
     phase = "new"
 
-    def handle(msg):
+    def handle(msg: object) -> dict[str, Any] | None:
         nonlocal phase
         if not isinstance(msg, dict) or msg.get("jsonrpc") != "2.0" or not isinstance(msg.get("method"), str):
             return error(None, -32600, "Invalid request")
@@ -63,7 +63,7 @@ def serve(client: Client, inp: TextIO, out: TextIO) -> None:
         if not isinstance(params, dict):
             return error(req_id, -32602, "Expected named parameters")
         if method == "ping":
-            result = {}
+            result: dict[str, Any] = {}
         elif method == "initialize" and phase == "new":
             if (not isinstance(params.get("protocolVersion"), str) or not isinstance(params.get("capabilities"), dict)
                     or not isinstance(params.get("clientInfo"), dict)):
@@ -89,7 +89,7 @@ def serve(client: Client, inp: TextIO, out: TextIO) -> None:
         try:
             msg = json.loads(line)
         except (ValueError, RecursionError):
-            response = error(None, -32700, "Parse error")
+            response: dict[str, Any] | None = error(None, -32700, "Parse error")
         else:
             response = handle(msg)
         if response is not None:
@@ -97,7 +97,7 @@ def serve(client: Client, inp: TextIO, out: TextIO) -> None:
             out.flush()
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--offline", action="store_true", help="serve the synthetic replay cassette")
     args = parser.parse_args()

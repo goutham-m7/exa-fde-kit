@@ -15,7 +15,7 @@ from urllib.parse import quote, unquote_plus, urlsplit, urlunsplit
 from ..agent import public_link
 
 
-def definition(webset: str, callback: str) -> list[dict]:
+def definition(webset: str, callback: str) -> list[dict[str, object]]:
     if not webset.strip() or not public_link(callback) or urlsplit(callback).scheme != "https":
         raise ValueError("expected a Webset ID and an HTTPS callback URL")
     base = "https://api.exa.ai/websets/v0"
@@ -47,12 +47,14 @@ def canonical(url: str) -> str:
     if not public_link(url) or "\\" in url:
         raise ValueError("invalid article URL")
     u = urlsplit(url)
+    if not u.hostname:
+        raise ValueError("missing article hostname")
     host = u.hostname.lower()
     if ":" in host:
         host = f"[{host}]"
     if u.port is not None and u.port != (443 if u.scheme == "https" else 80):
         host += f":{u.port}"
-    def relevant(field):
+    def relevant(field: str) -> bool:
         key = unquote_plus(field.partition("=")[0]).lower()
         return not (key.startswith("utm_") or key in {"gclid", "fbclid"})
     query = "&".join(f for f in u.query.split("&") if relevant(f))
@@ -102,7 +104,7 @@ class Inbox:
         if not isinstance(title, str):
             raise ValueError("invalid title")
         with closing(sqlite3.connect(self.path)) as db, db:
-            def first(kind, value):
+            def first(kind: str, value: str) -> bool:
                 return db.execute("INSERT OR IGNORE INTO seen VALUES(?,?,?)", (self.webset, kind, value)).rowcount == 1
             if not first("event", field(event, "id")):
                 return "duplicate"
@@ -119,7 +121,7 @@ class Inbox:
             for url, title in db.execute("SELECT url,title FROM articles WHERE webset=? AND day=? ORDER BY url",
                                          (self.webset, day.isoformat())):
                 text = html.escape(" ".join(title.split()))
-                text = re.sub(r"([\\\[\]*_])", r"\\\1", text)
+                text = re.sub(r"([\\\[\]*_`~|])", r"\\\1", text)
                 target = quote(url, safe="%:/?&=+#,;@!$'()*~-._")
                 lines.append(f"- {text} — <{target}>")
         if len(lines) == 2:
@@ -134,10 +136,10 @@ def receiver(inbox: Inbox, secret: bytes, port: int) -> HTTPServer:
     class Handler(BaseHTTPRequestHandler):
         timeout = 5
 
-        def log_message(self, *args):
+        def log_message(self, format: str, *args: object) -> None:
             pass  # No raw request paths, payloads or headers in logs.
 
-        def do_POST(self):
+        def do_POST(self) -> None:
             if self.path != "/webhook":
                 return self.send_error(404)
             lengths = self.headers.get_all("Content-Length", [])

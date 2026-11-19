@@ -4,8 +4,7 @@ Use the [Websets monitor](https://docs.exa.ai/websets/api/monitors/create-a-moni
 
 ## Configure without starting a paid schedule
 
-
-definition command (no network):
+Generate the request bodies locally:
 
     uv run python -m exa_fde_kit.monitor definition ws_example https://customer.example/webhook
 
