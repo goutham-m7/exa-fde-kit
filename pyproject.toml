@@ -20,3 +20,27 @@ dev = ["pytest>=8,<10"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+# Check the new public modules strictly. Older untyped modules retain their
+# inferred signatures, but their pre-existing diagnostics aren't CI gates.
+follow_imports = "silent"
+files = [
+    "src/exa_fde_kit/agent.py",
+    "src/exa_fde_kit/evaluation.py",
+    "src/exa_fde_kit/router.py",
+    "src/exa_fde_kit/judge.py",
+    "src/exa_fde_kit/stats.py",
+    "src/exa_fde_kit/report_html.py",
+    "src/exa_fde_kit/health.py",
+    "src/exa_fde_kit/loadtest.py",
+    "src/exa_fde_kit/mcp_server.py",
+    "src/exa_fde_kit/monitor",
+    "src/exa_fde_kit/telemetry.py",
+]
