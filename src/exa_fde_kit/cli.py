@@ -13,6 +13,7 @@ from .agent import research
 from .client import Client, LOG
 from .evaluation import PRESETS, evaluate, load_cases, report
 from .replay import replay_transport
+from .telemetry import events, prometheus, query_trace, record_answer
 
 
 def main() -> int:
@@ -24,6 +25,9 @@ def main() -> int:
     question.add_argument("--case", choices=[c.id for c in load_cases()])
     ask.add_argument("--preset", choices=PRESETS, default="baseline")
     ask.add_argument("--no-cache", action="store_true", help="do not persist request results")
+    ask.add_argument("--tenant", help="pseudonymous tenant slug for correlated call and answer logs")
+    metrics = sub.add_parser("metrics", help="summarise a call JSONL file as Prometheus text (offline)")
+    metrics.add_argument("log", type=Path)
     bench = sub.add_parser("eval", help="run the benchmark; live mode can incur charges")
     bench.add_argument("--preset", choices=PRESETS, help="only run this preset (default: all presets)")
     bench.add_argument("--limit", type=int, choices=range(1, len(load_cases()) + 1), metavar="N")
@@ -32,6 +36,13 @@ def main() -> int:
         p.add_argument("--offline", action="store_true", help="use synthetic recordings without network access")
         p.add_argument("--log-calls", action="store_true", help="emit JSON attempt telemetry in offline mode too")
     args = parser.parse_args()
+    if args.cmd == "metrics":
+        try:
+            with args.log.open(encoding="utf-8") as stream:
+                print(prometheus(events(stream)), end="")
+            return 0
+        except (ValueError, OSError) as exc:
+            parser.exit(2, f"Cannot read metrics: {exc}\n")
     key = None if args.offline else os.environ.get("EXA_API_KEY", "").strip()
     if not args.offline and not key:
         print("Live mode requires EXA_API_KEY. Use --offline for synthetic replay.", file=sys.stderr)
@@ -54,7 +65,12 @@ def main() -> int:
             client = Client(http, cache_dir=cache_dir, mode="synthetic" if args.offline else "live")
             if args.cmd == "ask":
                 q = next(c.question for c in load_cases() if c.id == args.case) if args.case else args.question
-                a = research(client, q, PRESETS[args.preset])
+                if args.tenant:
+                    with query_trace(args.tenant):
+                        a = research(client, q, PRESETS[args.preset])
+                        record_answer(a, client.mode)
+                else:
+                    a = research(client, q, PRESETS[args.preset])
                 label = "SYNTHETIC FIXTURE — not live evidence" if args.offline else "LIVE SOURCES (local cache may apply)"
                 print(f"{label}\n{q}\n")
                 if a.error:

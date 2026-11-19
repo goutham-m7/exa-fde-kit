@@ -19,6 +19,8 @@ from typing import Callable
 
 import httpx
 
+from .telemetry import span_fields
+
 LOG = logging.getLogger("exa_fde_kit")
 
 
@@ -122,8 +124,8 @@ class Client:
         def record(attempt, status, start, usd=None, basis="unknown", cached=False):
             call = Call(endpoint, attempt, status, (time.monotonic() - start) * 1000, usd, basis, cached)
             calls.append(call)
-            LOG.info(json.dumps({"event": "exa_call", "mode": self.mode,
-                                 "timestamp": datetime.now(timezone.utc).isoformat(), **asdict(call)}))
+            if LOG.isEnabledFor(logging.INFO):
+                LOG.info(json.dumps({"event": "exa_call", "mode": self.mode, **span_fields(), **asdict(call)}))
 
         if self.cache:
             start = time.monotonic()
